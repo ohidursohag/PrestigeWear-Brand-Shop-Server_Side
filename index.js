@@ -32,13 +32,7 @@ async function run() {
 
       const brandCollection = client.db('PrestigeWearDB').collection('Brands');
       const productCollection = client.db('PrestigeWearDB').collection('Products');
-
-      // get requests for brand data
-      app.get('/brands', async (req, res) => {
-         const result = await brandCollection.find().toArray();
-         res.send(result);
-      })
-
+      
       // get single Brand data request 
       app.get('/brands/:id', async (req, res) => {
          const { id } = req.params;
@@ -49,6 +43,14 @@ async function run() {
          console.log(result);
          res.send(result);
       })
+
+      // get requests for brand data
+      app.get('/brands', async (req, res) => {
+         const result = await brandCollection.find().toArray();
+         res.send(result);
+      })
+
+      
 
       // post request
       app.post('/products', async (req, res) => {
