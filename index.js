@@ -47,19 +47,8 @@ async function run() {
             _id: new ObjectId(id),
          }
          const result = await brandCollection.findOne(query);
-         console.log(result);
          res.send(result);
       })
-
-
-      // post request
-      app.post('/products', async (req, res) => {
-         const Product = req.body;
-         const result = await productCollection.insertOne(Product);
-         // console.log(result);
-         res.send(result);
-      })
-
 
       // get single Product data request 
       app.get('/products/:id', async (req, res) => {
@@ -68,15 +57,36 @@ async function run() {
             _id: new ObjectId(id),
          }
          const result = await productCollection.findOne(query);
-         console.log(result);
          res.send(result);
       })
-   
+
       // get requests for Products data
       app.get('/products', async (req, res) => {
          const result = await productCollection.find().toArray();
          res.send(result);
       }) 
+
+      // post request
+      app.post('/products', async (req, res) => {
+         const Product = req.body;
+         const result = await productCollection.insertOne(Product);
+         res.send(result);
+      })
+
+      // Update request with Put method
+      app.put('/products/:id', async (req, res) => {
+         const id = req.params.id;
+         const updateData = req.body;
+         const filter = { _id: new ObjectId(id) }
+         const options = { upsert: true }
+         const updatedProduct = { $set: updateData }
+         const result = await productCollection.updateOne(filter, updatedProduct, options);
+         console.log(id);
+         console.log(updateData);
+         res.send(result);
+      });
+
+
 
       // Send a ping to confirm a successful connection
       await client.db("admin").command({ ping: 1 });
