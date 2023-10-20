@@ -32,11 +32,17 @@ async function run() {
 
       const brandCollection = client.db('PrestigeWearDB').collection('Brands');
       const productCollection = client.db('PrestigeWearDB').collection('Products');
+      const cartDataCollection = client.db('PrestigeWearDB').collection('cartData');
        
 
       // get requests for brand data
       app.get('/brands', async (req, res) => {
          const result = await brandCollection.find().toArray();
+         res.send(result);
+      }) 
+      // get requests for brand data
+      app.get('/cart-data', async (req, res) => {
+         const result = await cartDataCollection.find().toArray();
          res.send(result);
       }) 
 
@@ -85,6 +91,23 @@ async function run() {
          console.log(updateData);
          res.send(result);
       });
+
+      /**
+       * Handle Product Cart Data
+       */
+
+      // get requests for brand data
+      app.get('/cart-data', async (req, res) => {
+         const result = await cartDataCollection.find().toArray();
+         res.send(result);
+      }) 
+
+      // post request
+      app.post('/cart-data', async (req, res) => {
+         const Product = req.body;
+         const result = await cartDataCollection.insertOne(Product);
+         res.send(result);
+      })
 
 
 
