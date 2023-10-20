@@ -32,7 +32,14 @@ async function run() {
 
       const brandCollection = client.db('PrestigeWearDB').collection('Brands');
       const productCollection = client.db('PrestigeWearDB').collection('Products');
-      
+       
+
+      // get requests for brand data
+      app.get('/brands', async (req, res) => {
+         const result = await brandCollection.find().toArray();
+         res.send(result);
+      }) 
+
       // get single Brand data request 
       app.get('/brands/:id', async (req, res) => {
          const { id } = req.params;
@@ -44,12 +51,6 @@ async function run() {
          res.send(result);
       })
 
-      // get requests for brand data
-      app.get('/brands', async (req, res) => {
-         const result = await brandCollection.find().toArray();
-         res.send(result);
-      }) 
-
 
       // post request
       app.post('/products', async (req, res) => {
@@ -58,13 +59,25 @@ async function run() {
          // console.log(result);
          res.send(result);
       })
+
+
+      // get single Product data request 
+      app.get('/products/:id', async (req, res) => {
+         const { id } = req.params;
+         const query = {
+            _id: new ObjectId(id),
+         }
+         const result = await productCollection.findOne(query);
+         console.log(result);
+         res.send(result);
+      })
    
       // get requests for Products data
       app.get('/products', async (req, res) => {
          const result = await productCollection.find().toArray();
          res.send(result);
       }) 
-      
+
       // Send a ping to confirm a successful connection
       await client.db("admin").command({ ping: 1 });
       console.log("Pinged your deployment. You successfully connected to MongoDB!");
