@@ -96,7 +96,7 @@ async function run() {
        * Handle Product Cart Data
        */
 
-      // get requests for brand data
+      // get requests for cartItems data
       app.get('/cart-data', async (req, res) => {
          const result = await cartDataCollection.find().toArray();
          res.send(result);
@@ -108,6 +108,17 @@ async function run() {
          const result = await cartDataCollection.insertOne(Product);
          res.send(result);
       })
+
+      // Delete request
+      app.delete('/cart-data/:id', async (req, res) => {
+         const { id } = req.params;
+         const filter = {
+            _id: new ObjectId(id),
+         }
+         const result = await cartDataCollection.deleteOne(filter);
+         console.log(result);
+         res.send(result);
+      });
 
 
 
